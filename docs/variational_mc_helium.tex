@@ -1,0 +1,161 @@
+\documentclass[aps,prb,twocolumn,showpacs,floatfix,superscriptaddress]{revtex4-1}
+\usepackage{dcolumn}
+\usepackage{bm}
+\usepackage{soul}
+\usepackage{amsmath,amssymb,graphicx}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{verbatim}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\usepackage[outdir=./]{epstopdf}
+\usepackage{float}
+\usepackage[colorlinks=true,citecolor=blue,urlcolor=blue,linkcolor=blue]{hyperref}
+\usepackage[caption=false]{subfig}
+\newcommand{\xz}{d$_\mathrm{xz}$\ }
+\newcommand{\yz}{d$_\mathrm{yz}$\ }
+\newcommand{\xy}{d$_\mathrm{xy}$\ }
+\newcommand{\xxyy}{d$_\mathrm{x^2-y^2}$\ }
+\newcommand{\zz}{d$_\mathrm{3z^2-r^2}$\ }
+\newcommand{\eV}{\,\mathrm{eV}}
+\newcommand{\nB}{n_\mathrm{B}}
+\newcommand{\nD}{n_\mathrm{D}}
+\newcommand{\kF}{k_\mathrm{F}}
+\newcommand{\meV}{\,\mathrm{meV}}
+\newcommand{\half}{\frac{1}{2}}
+\newcommand{\kk}{\mathbf{k}}
+\newcommand{\kkp}{\mathbf{k'}}
+\newcommand{\qq}{\mathbf{q}}
+\newcommand{\A}{\mathbf{A}}
+\newcommand{\EE}{\mathbf{E}}
+\newcommand{\filler}[1]{\textcolor{red}{#1}}
+\newcommand{\trel}{t_\mathrm{rel}}
+\newcommand{\tave}{t_\mathrm{ave}}
+\newcommand{\first}{$1^\mathrm{st}$\ }
+\newcommand{\tmin}{t_\mathrm{min}}
+\newcommand{\td}{t_\mathrm{delay}}
+\newcommand{\fs}{\,\mathrm{fs}}
+\newcommand{\resigma}{\mathrm{Re}\Sigma^{\mathrm{R}}}
+\newcommand{\imsigma}{\mathrm{Im}\Sigma^{\mathrm{R}}}
+\newcommand{\repi}{\mathrm{Re}\ \Pi^R}
+\newcommand{\impi}{\mathrm{Im}\ \Pi^R}
+\newcommand{\redr}{\mathrm{Re}\ D^R}
+\newcommand{\imdr}{\mathrm{Im}\ D^R}
+\newcommand{\regr}{\mathrm{Re}\ G^R}
+\newcommand{\imgr}{\mathrm{Im}\ G^R}
+\newcommand{\regl}{\mathrm{Re}\ G^<}
+\newcommand{\imgl}{\mathrm{Im}\ G^<}
+\newcommand{\CC}{\mathcal{C}}
+\newcommand{\TT}{\mathcal{T}}
+\newcommand{\FF}{\mathrm{F}}
+\DeclareGraphicsExtensions{.png,.jpg,.pdf}
+\bibliographystyle{apsrev4-1}
+
+
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=Octave,                 % the language of the code
+  otherkeywords={*,...},           % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,	                   % sets default tabsize to 2 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+\begin{document}
+\title{Ground State Energy of He atom calculated using Variational Quantum Monte-Carlo Method}
+\author{O.~Abdurazakov}
+\affiliation{\textbf {NC State} University, Department of Physics, Raleigh, NC 27695}
+
+\begin{abstract}
+Here, we search for the ground state energy of He atom using the variational monte-carlo (VMC) method. It is found to be approximately $-2.896$ hartrees.
+\end{abstract}
+
+\maketitle
+
+
+\section{Methods}
+According to the quantum statistical mechanics, the average energy of the Helium atom can be computed as 
+\begin{eqnarray}
+\langle E \rangle =& \frac{\int d\textbf{r}_1d\textbf{r}_2 \psi^*(\textbf{r}_1, \textbf{r}_2) H \psi(\textbf{r}_1, \textbf{r}_2)}{\int d\textbf{r}_1d\textbf{r}_2 \psi^*(\textbf{r}_1, \textbf{r}_2)} \\ 
+ =& \int d\textbf{r}_1d\textbf{r}_2 \rho(\textbf{r}_1, \textbf{r}_2)E_L(\textbf{r}_1, \textbf{r}_2),
+\end{eqnarray}
+where the Hamiltonian for the system of two electrons interactiong with each other and the heavy nucleus in atomic units ($m = c = \hbar = 1$) is 
+\begin{eqnarray}
+H = -\frac{1}{2}\nabla_{\textbf{r}_1}^2 - \frac{1}{2}\nabla_{\textbf{r}_2}^2 - \frac{2}{|\textbf{r}_1|} -\frac{2}{|\textbf{r}_2|} + \frac{1}{|\textbf{r}_1 - \textbf{r}_2|}.
+\end{eqnarray}
+Here, the local energy is given by
+\begin{eqnarray}
+E_L(\textbf{r}_1, \textbf{r}_2) \equiv \frac{1}{\psi(\textbf{r}_1, \textbf{r}_2)} H \psi(\textbf{r}_1, \textbf{r}_2),
+\end{eqnarray}
+and the distribution function is given by 
+\begin{eqnarray}
+\rho(\textbf{r}_1, \textbf{r}_2) \equiv \frac{\psi^*(\textbf{r}_1, \textbf{r}_2)\psi(\textbf{r}_1, \textbf{r}_2)}{\int d\textbf{r}_1d\textbf{r}_2 \psi^*(\textbf{r}_1, \textbf{r}_2)\psi(\textbf{r}_1, \textbf{r}_2)}.
+\end{eqnarray}
+In the expressions above $\psi$ is the two electron wave function, and $\textbf{r}_1$ and $\textbf{r}_2$ are their corresponding positions.
+We compute the multivariable integral using the Monte-Carlo method as follows.
+\begin{eqnarray}
+\langle E \rangle = \frac{1}{M}\sum_i^M E_L(\textbf{r}_{1i},\textbf{r}_{2i}) + \mathcal{O}(\frac{1}{\sqrt{M}})
+\end{eqnarray}
+where $\textbf{r}_{1i}$ and $\textbf{r}_{2i}$ are chosen according to the distribution function $\rho(\textbf{r}_{1}, \textbf{r}_{2})$.
+Our choice of the variational wave function is 
+\begin{eqnarray}
+\psi_{ab}(\textbf{r}_1, \textbf{r}_2) = e^{-2\frac{\textbf{r}_1 + a\textbf{r}_1^2}{1 + \textbf{r}_1}}e^{-2\frac{\textbf{r}_2 + a\textbf{r}_2^2}{1 + \textbf{r}_2}}e^{\frac{1}{2}\frac{\textbf{r}_{12}}{1 + b\textbf{r}_r{12}}},
+\end{eqnarray}
+where $a$ and $b$ are the variational parameters. By changing $a$ and $b$ we search for the ground state energy of the system.
+
+The short description of the numerical procedure is the following. First we generate $500$ walkers (each has six coordinates) with randomly selected inintial positions between $-0.5$ and $0.5$. Then we propose a trial step $\textbf{R'} = \textbf{R} + \delta (2.0 * \mathcal{U} -1.0)$ for each walker. Here, $\mathcal{}U$ is a random number drawn from a uniform distribution. If $\psi(\textbf{R'})/\psi(\textbf{R}) > \mathcal{U}$ the step is accepted, otherwise, rejected. The the local energy is computed for the given distribution of walkers according to their current positions. In computing the local energy we use a numerical derivative of the wave function. The average energy is then computed by taking the averge over $1000$ samples. We perform the procedure by varying the variational parameters between $0.0$ and $1.5$. 
+
+
+
+\section{Results}
+
+\begin{figure}
+        \includegraphics[width=0.99\columnwidth]{ab.png}
+        \caption{Ground state energy of He as a function of variational parameters $a$ and $b$. The mininmum point on the energy surface is shown by the black marker.}
+        \label{fig:ab}
+\end{figure}
+
+\begin{figure}
+        \includegraphics[width=0.99\columnwidth]{a.png}
+        \caption{Ground state energy as a function of $a$ at $b=0.40$.}
+        \label{fig:a}
+\end{figure}
+
+\begin{figure}
+        \includegraphics[width=0.99\columnwidth]{b.png}
+        \caption{Ground state energy as a function of $b$ at $a = 0.85$.}
+        \label{fig:b}
+\end{figure}
+
+In Fig.~\ref{fig:ab}, we present $\langle E \rangle$ as a function of the variational paramemeters $a$ and $b$ in false color plot. Its minimum value is marked by the black circular marker. It is illustrative to see the cut along the constant values of the variational parameters crosssing this point. They are presented in Fig.~\ref{fig:a} and in Fig.~\ref{fig:b}. The ground state energy or the minimum point on this energy surface is $E_{\mathrm{g}} \approx -2.896$ hartrees, which correspondes to $a = 0.85$ and $b = 0.40$ variational parameters.  
+
+
+\section{Conclusions}
+
+We have computed the average energy of the Helium atom as a function of two variational parameters and obtained its ground state. Our result agrees well with the expreminentally measured value.
+
+\section*{Appendix:~Codes}
+
+\lstinputlisting[language=python]{/home/omo/advanced_comp_physisc/hw3/vmc_helium.cc}
+
+\end{document}
